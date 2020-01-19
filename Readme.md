@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Камиль Нажмудинов](https://up.htmlacademy.ru/javascript/19/user/253339).
-* Наставник: `Неизвестно`.
+* Наставник: [Андрей Карякин](https://htmlacademy.ru/profile/id133011).
 
 ---
 
