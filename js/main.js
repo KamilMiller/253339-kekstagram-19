@@ -3,6 +3,7 @@
 // Константы.
 var USERS_PICTURES_QUATITY = 25;
 var USERS_PICTURES_CONTAINER = document.querySelector('.pictures');
+var OTHER_USERS_PIC_TEMPLATE = document.querySelector('#picture').content.querySelector('.picture');
 
 // Массив реплик комментариев.
 var COMMENT_TEXTS = [
@@ -33,11 +34,11 @@ var getRandomElement = function (arr) {
 }
 
 // Функция создания массива комментариев.
-var CommentsAssembling = function (commentQuantity) {
+var commentsAssembling = function (commentQuantity) {
   var commentsCache = [];
   var commentTextsCopy = COMMENT_TEXTS.slice();
   var commentateursCopy = COMMENTATEURS.slice();
-  for (var i = 0; i <= commentQuantity - 1; i++) {
+  for (var i = 0; i < commentQuantity; i++) {
     commentsCache.push({
       avatar: 'img/avatar' + getRandomInt(0, 5) + '.svg',
       message: getRandomElement(commentTextsCopy),
@@ -48,11 +49,11 @@ var CommentsAssembling = function (commentQuantity) {
 };
 
 // Функция сборки [карточки] фотогрфии с данными.
-var PicDataСollecting = function (dataQuantity) {
-  var usersPictures = [];
+var picDataСollecting = function (dataQuantity) {
+  var userPictures = [];
   for (var i = 1; i <= dataQuantity; i++) {
-    var comments = CommentsAssembling(getRandomInt(1, 6));
-    usersPictures.push({
+    var comments = commentsAssembling(getRandomInt(1, 6));
+    userPictures.push({
       comments: comments,
       commentsNumber: comments.length,
       description: 'Это фотография.',
@@ -60,23 +61,21 @@ var PicDataСollecting = function (dataQuantity) {
       url: 'photos/' + i + '.jpg',
     });
   };
-  return usersPictures;
+  return userPictures;
 };
 
 // Функция сборки DOM-объектов с фотографиями случайных пользователей.
-var PicCardsAssembling = function (picQuantity) {
-  var pictures = PicDataСollecting(picQuantity);
+var renderPictures = function (picturesArr) {
   var fragment = document.createDocumentFragment();
-  var otherUsersPicTemplate = document.querySelector('#picture').content.querySelector('.picture');
-  for (var i = 1; i <= picQuantity; i++) {
-    var otherUsersPicItem = otherUsersPicTemplate.cloneNode(true);
-    otherUsersPicItem.querySelector('.picture__img').src = pictures[i - 1].url;
-    otherUsersPicItem.querySelector('.picture__comments').textContent = pictures[i - 1].commentsNumber;
-    otherUsersPicItem.querySelector('.picture__likes').textContent = pictures[i - 1].likes;
+    picturesArr.forEach(function (item) {
+    var otherUsersPicItem = OTHER_USERS_PIC_TEMPLATE.cloneNode(true);
+    otherUsersPicItem.querySelector('.picture__img').src = item.url;
+    otherUsersPicItem.querySelector('.picture__comments').textContent = item.commentsNumber;
+    otherUsersPicItem.querySelector('.picture__likes').textContent = item.likes;
     fragment.appendChild(otherUsersPicItem);
-  };
-  USERS_PICTURES_CONTAINER.appendChild(fragment);
+  });
+  return fragment
 };
 
 // Запуск функции сборки и складирования DOM-объектов с фотографиями случайных пользователей.
-PicCardsAssembling(USERS_PICTURES_QUATITY);
+USERS_PICTURES_CONTAINER.appendChild(renderPictures(picDataСollecting(USERS_PICTURES_QUATITY)));
